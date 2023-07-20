@@ -2,6 +2,8 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.kotlinAndroid)
+    alias(libs.plugins.kotlinSerialization)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -28,11 +30,13 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://api.pl/\"")
+            buildConfigField("String", "BASE_URL", "\"https://dataservice.accuweather.com/\"")
+            buildConfigField("String", "API_KEY", "\"ZBHQHhWoRt30LHdEUCW0tGevDjWvRAJL\"")
         }
         debug {
             applicationIdSuffix = ".debug"
-            buildConfigField("String", "BASE_URL", "\"https://api.pl/\"")
+            buildConfigField("String", "BASE_URL", "\"https://dataservice.accuweather.com/\"")
+            buildConfigField("String", "API_KEY", "\"ZBHQHhWoRt30LHdEUCW0tGevDjWvRAJL\"")
         }
     }
     compileOptions {
@@ -52,6 +56,8 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/LICENSE.md"
+            excludes += "META-INF/LICENSE-notice.md"
         }
     }
 }
@@ -60,19 +66,24 @@ dependencies {
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.ui.graphics)
+    implementation(libs.compose.animation)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
-
+    implementation(libs.constraintlayout)
     implementation(libs.timber)
+    implementation(libs.threetenabp)
 
     //network
     implementation(libs.retrofit2)
     implementation(libs.json)
+    implementation(libs.kotlin.serialization)
     implementation(libs.retrofit.serialization.converter)
+//    implementation(libs.gson)
 
     //okhttp3
     implementation(platform(libs.okhttp3.bom))
@@ -89,6 +100,10 @@ dependencies {
     implementation(libs.navigation.material)
 
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.koin.test)
+    testImplementation(libs.koin.test.junit4)
+    androidTestImplementation(libs.mockk.android)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))

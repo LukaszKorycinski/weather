@@ -1,0 +1,82 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="64dp"
+            android:height="64dp"
+            android:viewportWidth="64"
+            android:viewportHeight="64">
+            <group
+                android:name="rotationGroup"
+                android:pivotX="32.0"
+                android:pivotY="32.0"
+                android:rotation="0.0">
+                <path
+                    android:fillColor="#00000000"
+                    android:pathData="M32,41L32,44"
+                    android:strokeWidth="2"
+                    android:strokeColor="#ffc570"
+                    android:strokeLineCap="round" />
+                <path
+                    android:fillColor="#00000000"
+                    android:pathData="M25.636,38.364L23.515,40.485"
+                    android:strokeWidth="2"
+                    android:strokeColor="#ffc570"
+                    android:strokeLineCap="round" />
+                <path
+                    android:fillColor="#00000000"
+                    android:pathData="M23,32L20,32"
+                    android:strokeWidth="2"
+                    android:strokeColor="#ffc570"
+                    android:strokeLineCap="round" />
+                <path
+                    android:fillColor="#00000000"
+                    android:pathData="M25.636,25.636L23.515,23.515"
+                    android:strokeWidth="2"
+                    android:strokeColor="#ffc570"
+                    android:strokeLineCap="round" />
+                <path
+                    android:fillColor="#00000000"
+                    android:pathData="M32,23L32,20"
+                    android:strokeWidth="2"
+                    android:strokeColor="#ffc570"
+                    android:strokeLineCap="round" />
+                <path
+                    android:fillColor="#00000000"
+                    android:pathData="M38.364,25.636L40.485,23.515"
+                    android:strokeWidth="2"
+                    android:strokeColor="#ffc570"
+                    android:strokeLineCap="round" />
+                <path
+                    android:fillColor="#00000000"
+                    android:pathData="M41,32L44,32"
+                    android:strokeWidth="2"
+                    android:strokeColor="#ffc570"
+                    android:strokeLineCap="round" />
+                <path
+                    android:fillColor="#00000000"
+                    android:pathData="M38.364,38.364L40.485,40.485"
+                    android:strokeWidth="2"
+                    android:strokeColor="#ffc570"
+                    android:strokeLineCap="round" />
+                <path
+                    android:fillColor="#ffc570"
+                    android:pathData="M32,32m-5,0a5,5 0,1 1,10 0a5,5 0,1 1,-10 0"
+                    android:strokeWidth="2"
+                    android:strokeColor="#ffa500" />
+            </group>
+        </vector>
+    </aapt:attr>
+    <target android:name="rotationGroup">
+        <aapt:attr name="android:animation">
+            <objectAnimator
+                android:duration="3500"
+                android:propertyName="rotation"
+                android:repeatCount="infinite"
+                android:repeatMode="restart"
+                android:interpolator="@android:anim/linear_interpolator"
+                android:valueFrom="0"
+                android:valueTo="360" />
+        </aapt:attr>
+    </target>
+</animated-vector>

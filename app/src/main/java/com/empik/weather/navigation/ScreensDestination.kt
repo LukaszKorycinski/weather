@@ -1,8 +1,14 @@
 package com.empik.weather.navigation
 
-sealed interface ScreensDestination {
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
+sealed interface ScreensDestination : Parcelable {
+
+    @Parcelize
     object SearchScreen : ScreensDestination
 
-    object CityWeatherScreen : ScreensDestination
+    @Parcelize
+    class CityWeatherScreen(val cityKey: String, val cityName: String) : ScreensDestination
 }
