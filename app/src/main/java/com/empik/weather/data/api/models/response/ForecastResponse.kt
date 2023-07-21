@@ -32,10 +32,6 @@ data class DailyForecast(
     @SerialName("EpochDate") val epochDate: Long,
     @SerialName("Temperature") val temperature: Temperature,
     @SerialName("Day") val day: Day,
-    @SerialName("Night") val night: Night,
-    @SerialName("Sources") val sources: List<String>,
-    @SerialName("MobileLink") val mobileLink: String,
-    @SerialName("Link") val link: String
 ){
     fun getDayOfWeek(): String {
         val dateTime = LocalDateTime.parse(date, DateTimeFormatter.ISO_DATE_TIME)
@@ -44,7 +40,6 @@ data class DailyForecast(
             Locale.ENGLISH
         )
     }
-
 }
 
 @Serializable
@@ -64,13 +59,6 @@ data class TemperatureValue(
 
 @Serializable
 data class Day(
-    @SerialName("Icon") val icon: Int,
-    @SerialName("IconPhrase") val iconPhrase: String,
-    @SerialName("HasPrecipitation") val hasPrecipitation: Boolean
-)
-
-@Serializable
-data class Night(
     @SerialName("Icon") val icon: Int,
     @SerialName("IconPhrase") val iconPhrase: String,
     @SerialName("HasPrecipitation") val hasPrecipitation: Boolean

@@ -17,26 +17,35 @@ android {
         versionCode = 1
         versionName = "0.0.1"
 
+        buildConfigField("String", "BASE_URL", "\"https://dataservice.accuweather.com/\"")
+        buildConfigField("String", "API_KEY", "\"ZBHQHhWoRt30LHdEUCW0tGevDjWvRAJL\"")
+
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
     }
 
+    signingConfigs {
+        create("releaseSigning") {
+            storeFile = file("../release.keystore")
+            storePassword = "android"
+            keyAlias = "android"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig = signingConfigs.getByName("releaseSigning")
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BASE_URL", "\"https://dataservice.accuweather.com/\"")
-            buildConfigField("String", "API_KEY", "\"ZBHQHhWoRt30LHdEUCW0tGevDjWvRAJL\"")
         }
         debug {
             applicationIdSuffix = ".debug"
-            buildConfigField("String", "BASE_URL", "\"https://dataservice.accuweather.com/\"")
-            buildConfigField("String", "API_KEY", "\"ZBHQHhWoRt30LHdEUCW0tGevDjWvRAJL\"")
         }
     }
     compileOptions {
@@ -108,6 +117,7 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
+    androidTestImplementation(libs.koin.test.junit4)
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 }

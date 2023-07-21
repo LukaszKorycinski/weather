@@ -2,7 +2,6 @@ package com.empik.weather
 
 import com.empik.weather.data.api.models.response.DailyForecast
 import com.empik.weather.data.api.models.response.Day
-import com.empik.weather.data.api.models.response.Night
 import com.empik.weather.data.api.models.response.Temperature
 import com.empik.weather.ui.screens.city_weather.translatedDayOfWeek
 import io.mockk.MockKAnnotations
@@ -23,9 +22,8 @@ class GetDayOfWeekTest {
     fun getDayOfWeekTest() {
         val temperature: Temperature = mockk(relaxed = true)
         val day: Day = mockk(relaxed = true)
-        val night: Night = mockk(relaxed = true)
 
-        var dailyForecast = DailyForecast("", 1, temperature, day, night, emptyList(), "", "")
+        var dailyForecast = DailyForecast("", 1, temperature, day)
 
         dailyForecast = dailyForecast.copy(date = "2023-07-20T07:00:00+02:00")
         print(dailyForecast.getDayOfWeek())

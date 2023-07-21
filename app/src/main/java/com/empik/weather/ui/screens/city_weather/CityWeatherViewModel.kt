@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.empik.weather.data.api.SafeResponse
 import com.empik.weather.data.api.models.response.ForecastResponse
 import com.empik.weather.data.repository.WeatherRepository
+import com.empik.weather.data.repository.WeatherRepositoryInterface
 import com.empik.weather.ui.screens.city_search.CitySearchError
 import com.empik.weather.ui.screens.city_search.CitySearchErrorType
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,34 +14,37 @@ import kotlinx.coroutines.launch
 
 class CityWeatherViewModel(
     private val locationKey: String,
-    private val weatherRepository: WeatherRepository,
+    private val weatherRepository: WeatherRepositoryInterface,
 ) : ViewModel() {
     private val _state = MutableStateFlow(CityWeatherState())
     val state = _state.asStateFlow()
 
     init {
-        getForecast(locationKey)
+        getForecast()
     }
 
-    private fun getForecast(query: String) {
+    fun getForecast() {
         viewModelScope.launch {
+            _state.value = _state.value.copy(
+                forecast = null,
+                isLoading = true,
+                error = CityWeatherError(false),
+            )
             weatherRepository.getForecast(locationKey).collect {
                 when (it) {
                     is SafeResponse.Loading -> {
                         _state.value = _state.value.copy(
                             forecast = null,
                             isLoading = true,
-                            error = null
-                        ) }
+                            error = CityWeatherError(false),
+                        )
+                    }
 
                     is SafeResponse.Error -> {
                         _state.value = _state.value.copy(
                             forecast = null,
                             isLoading = false,
-                            error = CitySearchError(
-                                CitySearchErrorType.API_ERROR,
-                                it.message
-                            )
+                            error = CityWeatherError(true, it.message),
                         )
                     }
 
@@ -48,7 +52,7 @@ class CityWeatherViewModel(
                         _state.value = _state.value.copy(
                             forecast = it.data,
                             isLoading = false,
-                            error = null,
+                            error = CityWeatherError(false),
                         )
                     }
                 }
@@ -60,5 +64,7 @@ class CityWeatherViewModel(
 data class CityWeatherState(
     val forecast: ForecastResponse? = null,
     val isLoading: Boolean = false,
-    val error: CitySearchError? = null,
+    val error: CityWeatherError = CityWeatherError(false),
 )
+
+data class CityWeatherError(val isError: Boolean = true, val message: String? = null)

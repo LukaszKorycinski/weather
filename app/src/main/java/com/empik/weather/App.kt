@@ -1,13 +1,14 @@
 package com.empik.weather
 
 import android.app.Application
-import android.content.Context
 import com.empik.weather.di.TimberKoinLogger
 import com.empik.weather.di.apiModule
 import com.empik.weather.di.appModule
 import com.empik.weather.di.networkModule
 import com.empik.weather.di.repositoryModule
+import com.empik.weather.di.repositoryModuleMocked
 import com.empik.weather.di.viewModelModule
+import com.empik.weather.helper.testMode
 import com.jakewharton.threetenabp.AndroidThreeTen
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
@@ -48,7 +49,7 @@ class App: Application() {
                 apiModule,
                 appModule,
                 networkModule,
-                repositoryModule,
+                if(testMode) repositoryModuleMocked else repositoryModule,
                 viewModelModule
             )
         }

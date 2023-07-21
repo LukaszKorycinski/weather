@@ -1,12 +1,11 @@
 <resources>
     <string name="app_name">Weather</string>
-    <string name="search_hint">Podaj miasto</string>
 
-    <string name="unknown_api_error">Nieznany błąd api</string>
-
+    <string name="search_hint">Wpisz nazwę miasta</string>
+    <string name="unknown_api_error">Nieznany błąd połączenia z serwerem</string>
     <string name="city_name_invalid">Nieprawidłowa nazwa miasta</string>
-
-    <string name="degrees_celsius">%1$.0f\u2103</string>
+    <string name="degrees_celsius">%1$d\u2103</string>
+    <string name="retry">Spróbuj ponownie</string>
 
     <string name="monday">Poniedziałek</string>
     <string name="tuesday">Wtorek</string>

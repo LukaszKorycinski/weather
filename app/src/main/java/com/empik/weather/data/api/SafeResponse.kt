@@ -2,6 +2,7 @@ package com.empik.weather.data.api
 
 import com.empik.weather.data.api.models.response.ErrorResponse
 import kotlinx.serialization.json.Json
+import org.koin.java.KoinJavaComponent.get
 import retrofit2.Response
 import timber.log.Timber
 import java.io.IOException
@@ -28,7 +29,8 @@ suspend fun <T> safeApiCall(block: suspend () -> Response<T>): SafeResponse<T> {
 
             val errorBody = response.errorBody()?.string()
             errorBody?.let {
-                val errorResponseBody = Json.decodeFromString<ErrorResponse>(it)
+                val jsonSerializer = get<Json>(Json::class.java)
+                val errorResponseBody = jsonSerializer.decodeFromString<ErrorResponse>(it)
                 SafeResponse.Error(errorType = ErrorType.DATA, message = errorResponseBody.message)
             } ?: SafeResponse.Error(errorType = ErrorType.DATA)
         }

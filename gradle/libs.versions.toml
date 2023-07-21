@@ -19,7 +19,6 @@ json = "1.5.1"
 retrofit-serialization-converter = "1.0.0"
 timber = "5.0.1"
 kotlin-serialization = "1.5.1"
-gson = "2.10"
 mockk = "1.13.5"
 constraintlayout = "1.0.1"
 threetenabp = "1.4.6"
@@ -56,7 +55,6 @@ json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", v
 retrofit-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofit-serialization-converter" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 kotlin-serialization = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlin-serialization" }
-#gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "constraintlayout" }

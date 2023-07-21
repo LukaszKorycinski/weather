@@ -3,17 +3,16 @@ package com.empik.weather.ui.screens.city_search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.empik.weather.data.api.SafeResponse
-import com.empik.weather.data.api.models.response.CityAutocompleteResponseItem
 import com.empik.weather.data.api.models.response.CityResponseItem
 import com.empik.weather.data.repository.LocalRepository
 import com.empik.weather.data.repository.WeatherRepository
+import com.empik.weather.data.repository.WeatherRepositoryInterface
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class CitySearchViewModel(
-    private val weatherRepository: WeatherRepository,
+    private val weatherRepository: WeatherRepositoryInterface,
     private val localRepository: LocalRepository,
 ) : ViewModel() {
 
@@ -79,39 +78,58 @@ class CitySearchViewModel(
             _state.value = _state.value.copy(error = CitySearchError(CitySearchErrorType.INVALID_CITY_NAME))
         }
     }
+
+    fun errorHandled() {
+        _state.value = _state.value.copy(error = null)
+    }
+
     fun getCitiesByQuery(query: String){
-        viewModelScope.launch {
-            weatherRepository.getCityAutocomplete(query).collect {
-                when (it) {
-                    is SafeResponse.Loading -> {
-                        _state.value = _state.value.copy(
-                        fetchedCitiesNames = emptyList(),
-                        isLoading = true,
-                        error = null
-                    ) }
-
-                    is SafeResponse.Error -> {
-                        _state.value = _state.value.copy(
+        if (validateCityName(query)) {
+            viewModelScope.launch {
+                weatherRepository.getCityAutocomplete(query).collect {
+                    when (it) {
+                        is SafeResponse.Loading -> {
+                            _state.value = _state.value.copy(
                             fetchedCitiesNames = emptyList(),
-                            isLoading = false,
-                            error = CitySearchError(
-                                CitySearchErrorType.API_ERROR,
-                                it.message
-                            )
-                        )
-                    }
+                            isLoading = true,
+                            error = null
+                        ) }
 
-                    is SafeResponse.Success -> {
-                        _state.value = _state.value.copy(
-                            fetchedCitiesNames = it.data,
-                            isLoading = false,
-                            error = null,
-                        )
+                        is SafeResponse.Error -> {
+                            _state.value = _state.value.copy(
+                                fetchedCitiesNames = emptyList(),
+                                isLoading = false,
+                                error = CitySearchError(
+                                    CitySearchErrorType.API_ERROR,
+                                    it.message
+                                )
+                            )
+                        }
+
+                        is SafeResponse.Success -> {
+                            _state.value = _state.value.copy(
+                                fetchedCitiesNames = it.data,
+                                isLoading = false,
+                                error = null,
+                            )
+                        }
                     }
                 }
             }
+        } else {
+            _state.value = _state.value.copy(error = CitySearchError(CitySearchErrorType.INVALID_CITY_NAME))
         }
     }
+
+    fun onErrorHandled() {
+        _state.value = _state.value.copy(error = null)
+    }
+
+    fun clearCitySelected() {
+        _state.value = _state.value.copy(citySelected = null)
+    }
+
+
 }
 
 data class CitySearchScreenState(

@@ -15,6 +15,9 @@ class DataStore(
 
     companion object {
         const val CITIES_FILE = "cities.json"
+        const val FORECAST_MOCK_JSON = "forecast_mock_response.json"
+        const val CITY_MOCK_JSON = "city_mock_response.json"
+        const val CITIES_QUERY_MOCK_JSON = "cities_query_mock_response.json"
     }
 
     var cities: List<CityResponseItem> = loadCities()
