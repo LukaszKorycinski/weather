@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.empik.weather.data.api.SafeResponse
 import com.empik.weather.data.api.models.response.CityResponseItem
 import com.empik.weather.data.repository.LocalRepository
-import com.empik.weather.data.repository.WeatherRepository
 import com.empik.weather.data.repository.WeatherRepositoryInterface
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,10 +23,10 @@ class CitySearchViewModel(
     }
 
     init {
-        getSavedCities()
+        fetchSavedCities()
     }
 
-    private fun getSavedCities(){
+    private fun fetchSavedCities(){
         _state.value = _state.value.copy(
             savedCities = localRepository.cities,
         )
@@ -36,7 +35,7 @@ class CitySearchViewModel(
     fun saveCity(city: CityResponseItem){
         viewModelScope.launch {
             localRepository.saveCity(city)
-            getSavedCities()
+            fetchSavedCities()
         }
     }
 
