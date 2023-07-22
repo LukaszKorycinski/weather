@@ -377,8 +377,7 @@ fun getWeatherIcon(iconApi: Int): Int = when(iconApi){
     in 1 .. 2, 30 -> R.drawable.animated_sunny_day
     in 3 .. 5, 20, 21, 31, 32 -> R.drawable.animated_cloudy_sunny_day
     in 6 .. 11, 19 -> R.drawable.animated_cloudy_day
-    in 12 .. 18 -> R.drawable.animated_rainy_day
-    in 22 .. 29 -> R.drawable.animated_rainy_day
+    in 12 .. 18, in 22 .. 29 -> R.drawable.animated_rainy_day
     else -> R.drawable.animated_sunny_day
 }
 
