@@ -1,5 +1,6 @@
 package com.empik.weather
 
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filter
@@ -16,15 +17,21 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.empik.weather.data.api.SafeResponse
 import com.empik.weather.data.api.models.response.ForecastResponse
 import com.empik.weather.data.data_store.DataStore
+import com.empik.weather.data.repository.WeatherRepository
+import com.empik.weather.data.repository.WeatherRepositoryMocked
 import com.empik.weather.helper.TestHelper
+import com.empik.weather.helper.getMockedForecast
 import com.empik.weather.ui.TestTags
 import com.empik.weather.ui.screens.city_weather.CityWeatherError
 import com.empik.weather.ui.screens.city_weather.CityWeatherScreenContainer
 import com.empik.weather.ui.screens.city_weather.CityWeatherState
 import com.empik.weather.ui.screens.city_weather.translatedDayOfWeek
 import com.empik.weather.ui.theme.WeatherTheme
+import io.mockk.mockk
+import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
@@ -223,13 +230,5 @@ class CityWeatherScreenTest {
         )
 
         composeRule.onNodeWithTag(TestTags.LOADING_SCREEN).assertIsDisplayed()
-    }
-
-    @OptIn(ExperimentalSerializationApi::class)
-    private fun getMockedForecast(): ForecastResponse {
-        return App.appContext.assets.open(DataStore.FORECAST_MOCK_JSON).use {
-            val json = KoinJavaComponent.get<Json>(Json::class.java)
-            json.decodeFromStream<ForecastResponse>(it)
-        }
     }
 }

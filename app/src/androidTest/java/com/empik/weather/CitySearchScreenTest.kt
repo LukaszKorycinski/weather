@@ -68,7 +68,6 @@ class CitySearchScreenTest {
         composeRule.onNodeWithTag(TestTags.SEARCH).onChildAt(0).performTextInput("Warszawa")
         assert(searchQuesry == "Warszawa")
 
-
         composeRule.onNodeWithTag(TestTags.SEARCH).onChildAt(0).performImeAction()
         assert(searchForCity == "Warszawa")
 
