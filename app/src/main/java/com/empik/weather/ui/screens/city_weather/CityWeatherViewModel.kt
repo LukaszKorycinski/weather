@@ -4,10 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.empik.weather.data.api.SafeResponse
 import com.empik.weather.data.api.models.response.ForecastResponse
-import com.empik.weather.data.repository.WeatherRepository
 import com.empik.weather.data.repository.WeatherRepositoryInterface
-import com.empik.weather.ui.screens.city_search.CitySearchError
-import com.empik.weather.ui.screens.city_search.CitySearchErrorType
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -44,7 +41,7 @@ class CityWeatherViewModel(
                         _state.value = _state.value.copy(
                             forecast = null,
                             isLoading = false,
-                            error = CityWeatherError(true, it.message),
+                            error = CityWeatherError(true, it.message  ?: it.throwable?.localizedMessage),
                         )
                     }
 

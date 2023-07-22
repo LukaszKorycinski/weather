@@ -19,28 +19,28 @@ class WeatherRepositoryMocked: WeatherRepositoryInterface {
     }
     @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getCities(query: String): Flow<SafeResponse<List<CityResponseItem>>> {
-        val responseBudy = App.appContext.assets.open(CITY_MOCK_JSON).use {
+        val responseBody = App.appContext.assets.open(CITY_MOCK_JSON).use {
             val json = KoinJavaComponent.get<Json>(Json::class.java)
             json.decodeFromStream<List<CityResponseItem>>(it)
         }
-        return flow { emit(SafeResponse.Success(responseBudy)) }
+        return flow { emit(SafeResponse.Success(responseBody)) }
     }
 
     @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getCityAutocomplete(query: String): Flow<SafeResponse<List<CityResponseItem>>> {
-        val responseBudy = App.appContext.assets.open(CITIES_QUERY_MOCK_JSON).use {
+        val responseBody = App.appContext.assets.open(CITIES_QUERY_MOCK_JSON).use {
             val json = KoinJavaComponent.get<Json>(Json::class.java)
             json.decodeFromStream<List<CityResponseItem>>(it)
         }
-        return flow { emit(SafeResponse.Success(responseBudy)) }
+        return flow { emit(SafeResponse.Success(responseBody)) }
     }
 
     @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getForecast(locationKey: String): Flow<SafeResponse<ForecastResponse>> {
-        val responseBudy = App.appContext.assets.open(FORECAST_MOCK_JSON).use {
+        val responseBody = App.appContext.assets.open(FORECAST_MOCK_JSON).use {
             val json = KoinJavaComponent.get<Json>(Json::class.java)
             json.decodeFromStream<ForecastResponse>(it)
         }
-        return flow { emit(SafeResponse.Success(responseBudy)) }
+        return flow { emit(SafeResponse.Success(responseBody)) }
     }
 }

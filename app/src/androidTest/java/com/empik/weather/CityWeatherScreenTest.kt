@@ -1,6 +1,5 @@
 package com.empik.weather
 
-import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filter
@@ -17,11 +16,6 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeLeft
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import com.empik.weather.data.api.SafeResponse
-import com.empik.weather.data.api.models.response.ForecastResponse
-import com.empik.weather.data.data_store.DataStore
-import com.empik.weather.data.repository.WeatherRepository
-import com.empik.weather.data.repository.WeatherRepositoryMocked
 import com.empik.weather.helper.TestHelper
 import com.empik.weather.helper.getMockedForecast
 import com.empik.weather.ui.TestTags
@@ -30,17 +24,9 @@ import com.empik.weather.ui.screens.city_weather.CityWeatherScreenContainer
 import com.empik.weather.ui.screens.city_weather.CityWeatherState
 import com.empik.weather.ui.screens.city_weather.translatedDayOfWeek
 import com.empik.weather.ui.theme.WeatherTheme
-import io.mockk.mockk
-import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.ExperimentalSerializationApi
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
-import okhttp3.internal.wait
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.koin.java.KoinJavaComponent
-import java.io.InputStream
 import kotlin.math.roundToInt
 
 @RunWith(AndroidJUnit4::class)

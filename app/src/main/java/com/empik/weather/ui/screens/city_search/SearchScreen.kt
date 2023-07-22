@@ -41,7 +41,6 @@ import com.empik.weather.ui.TestTags
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
 
-
 @Composable
 fun SearchScreen(
     onCitySelected: (CityResponseItem) -> Unit,
@@ -58,7 +57,9 @@ fun SearchScreen(
 
     SearchScreenContent(
         state = state,
-        onCitySearchByQuery = { viewModel.getCitiesByQuery(it) },
+        onCitySearchByQuery = {
+            viewModel.getCitiesByQuery(it)
+            viewModel.clearQuery() },
         onCitySearch = { viewModel.getCityByName(it) },
         onCitySelected = {
             viewModel.saveCity(it)

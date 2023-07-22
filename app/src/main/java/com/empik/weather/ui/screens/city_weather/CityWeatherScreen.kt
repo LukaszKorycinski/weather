@@ -31,7 +31,6 @@ import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -232,7 +231,6 @@ fun CityWeatherScreenContent(state: CityWeatherState, contentPadding: PaddingVal
         }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CityWeatherTopBar(cityName: String, onBack: () -> Unit) {
     Row (

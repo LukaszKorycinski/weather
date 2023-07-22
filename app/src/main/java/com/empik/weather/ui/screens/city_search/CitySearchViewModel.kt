@@ -58,7 +58,7 @@ class CitySearchViewModel(
                                 isLoading = false,
                                 error = CitySearchError(
                                     CitySearchErrorType.API_ERROR,
-                                    it.message
+                                    it.message ?: it.throwable?.localizedMessage
                                 )
                             )
                         }
@@ -76,10 +76,6 @@ class CitySearchViewModel(
         } else {
             _state.value = _state.value.copy(error = CitySearchError(CitySearchErrorType.INVALID_CITY_NAME))
         }
-    }
-
-    fun errorHandled() {
-        _state.value = _state.value.copy(error = null)
     }
 
     fun getCitiesByQuery(query: String){
@@ -100,7 +96,7 @@ class CitySearchViewModel(
                                 isLoading = false,
                                 error = CitySearchError(
                                     CitySearchErrorType.API_ERROR,
-                                    it.message
+                                    it.message ?: it.throwable?.localizedMessage
                                 )
                             )
                         }
@@ -120,15 +116,17 @@ class CitySearchViewModel(
         }
     }
 
-    fun onErrorHandled() {
+    fun errorHandled() {
         _state.value = _state.value.copy(error = null)
+    }
+
+    fun clearQuery() {
+        _state.value = _state.value.copy(fetchedCitiesNames = emptyList())
     }
 
     fun clearCitySelected() {
         _state.value = _state.value.copy(citySelected = null)
     }
-
-
 }
 
 data class CitySearchScreenState(

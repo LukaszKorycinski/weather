@@ -10,7 +10,6 @@ import dev.olshevski.navigation.reimagined.NavBackHandler
 import dev.olshevski.navigation.reimagined.navigate
 import dev.olshevski.navigation.reimagined.pop
 import dev.olshevski.navigation.reimagined.rememberNavController
-import timber.log.Timber
 
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -30,7 +29,6 @@ fun MainScreen() {
                     locationKey = destination.cityKey,
                     cityName = destination.cityName,
                     onBack = {
-                        Timber.e("sdfgsd "+navController.backstack.entries.size)
                         if (navController.backstack.entries.size > 1) {
                         navController.pop()
                     } }

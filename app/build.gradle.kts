@@ -91,7 +91,6 @@ dependencies {
     implementation(libs.json)
     implementation(libs.kotlin.serialization)
     implementation(libs.retrofit.serialization.converter)
-//    implementation(libs.gson)
 
     //okhttp3
     implementation(platform(libs.okhttp3.bom))

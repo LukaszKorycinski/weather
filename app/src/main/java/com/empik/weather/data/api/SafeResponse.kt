@@ -37,10 +37,10 @@ suspend fun <T> safeApiCall(block: suspend () -> Response<T>): SafeResponse<T> {
     } catch (e: Throwable) {
         if (e is IOException) {
             Timber.w(e, "error API call - network issue")
-            SafeResponse.Error(errorType = ErrorType.NETWORK)
+            SafeResponse.Error(errorType = ErrorType.NETWORK, e)
         } else {
             Timber.w(e, "error API call - incorrect data/other")
-            SafeResponse.Error(errorType = ErrorType.DATA)
+            SafeResponse.Error(errorType = ErrorType.DATA, e)
         }
     }
 
