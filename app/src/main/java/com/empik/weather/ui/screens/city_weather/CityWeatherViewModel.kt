@@ -13,7 +13,7 @@ class CityWeatherViewModel(
     private val locationKey: String,
     private val weatherRepository: WeatherRepositoryInterface,
 ) : ViewModel() {
-    private val _state = MutableStateFlow(CityWeatherState())
+    private val _state = MutableStateFlow<CityWeatherState>(CityWeatherState.LOADING)
     val state = _state.asStateFlow()
 
     init {
@@ -22,46 +22,19 @@ class CityWeatherViewModel(
 
     fun getForecast() {
         viewModelScope.launch {
-            _state.value = _state.value.copy(
-                forecast = null,
-                isLoading = true,
-                error = CityWeatherError(false),
-            )
             weatherRepository.getForecast(locationKey).collect {
-                when (it) {
-                    is SafeResponse.Loading -> {
-                        _state.value = _state.value.copy(
-                            forecast = null,
-                            isLoading = true,
-                            error = CityWeatherError(false),
-                        )
-                    }
-
-                    is SafeResponse.Error -> {
-                        _state.value = _state.value.copy(
-                            forecast = null,
-                            isLoading = false,
-                            error = CityWeatherError(true, it.message  ?: it.throwable?.localizedMessage),
-                        )
-                    }
-
-                    is SafeResponse.Success -> {
-                        _state.value = _state.value.copy(
-                            forecast = it.data,
-                            isLoading = false,
-                            error = CityWeatherError(false),
-                        )
-                    }
+                _state.value = when (it) {
+                    is SafeResponse.Loading -> CityWeatherState.LOADING
+                    is SafeResponse.Error -> CityWeatherState.ERROR(true, it.message  ?: it.throwable?.localizedMessage)
+                    is SafeResponse.Success -> CityWeatherState.CONTENT(it.data)
                 }
             }
         }
     }
 }
 
-data class CityWeatherState(
-    val forecast: ForecastResponse? = null,
-    val isLoading: Boolean = false,
-    val error: CityWeatherError = CityWeatherError(false),
-)
-
-data class CityWeatherError(val isError: Boolean = true, val message: String? = null)
+sealed interface CityWeatherState {
+    class CONTENT(val forecast: ForecastResponse? = null) : CityWeatherState
+    object LOADING : CityWeatherState
+    class ERROR(val isError: Boolean = true, val message: String? = null) : CityWeatherState
+}

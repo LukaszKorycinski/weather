@@ -91,10 +91,10 @@ fun CityWeatherScreenContainer(state: CityWeatherState, cityName: String, onBack
             CityWeatherTopBar(cityName, onBack)
         }
     ) { contentPadding ->
-        when {
-            state.error.isError -> ErrorScreen(state, contentPadding, onRetry)
-            state.forecast != null -> CityWeatherScreenContent(state, contentPadding, onBack)
-            else -> LoadingScreen(contentPadding)
+        when (state){
+            is CityWeatherState.ERROR -> ErrorScreen(state, contentPadding, onRetry)
+            is CityWeatherState.CONTENT -> CityWeatherScreenContent(state, contentPadding, onBack)
+            is CityWeatherState.LOADING -> LoadingScreen(contentPadding)
         }
     }
 }
@@ -136,7 +136,7 @@ fun LoadingScreen(contentPadding: PaddingValues){
 }
 
 @Composable
-fun ErrorScreen(state: CityWeatherState, contentPadding: PaddingValues, onRetry: () -> Unit){
+fun ErrorScreen(error: CityWeatherState.ERROR, contentPadding: PaddingValues, onRetry: () -> Unit){
     Column(
         modifier = Modifier.padding(contentPadding).fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -148,7 +148,7 @@ fun ErrorScreen(state: CityWeatherState, contentPadding: PaddingValues, onRetry:
             tint = Color.Red)
         Text(
             modifier = Modifier.padding(16.dp),
-            text = state.error.message ?: stringResource(id = R.string.unknown_api_error),
+            text = error.message ?: stringResource(id = R.string.unknown_api_error),
             textAlign = TextAlign.Center)
         Button(
             modifier = Modifier.testTag(TestTags.RETRY_BUTTON),
@@ -160,7 +160,7 @@ fun ErrorScreen(state: CityWeatherState, contentPadding: PaddingValues, onRetry:
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CityWeatherScreenContent(state: CityWeatherState, contentPadding: PaddingValues, onBack: () -> Unit) {
+fun CityWeatherScreenContent(content: CityWeatherState.CONTENT, contentPadding: PaddingValues, onBack: () -> Unit) {
         ConstraintLayout (
             Modifier
                 .padding(contentPadding)
@@ -178,12 +178,12 @@ fun CityWeatherScreenContent(state: CityWeatherState, contentPadding: PaddingVal
                         bottom.linkTo(previousRef.top)
                     }
                     .testTag(TestTags.DAYS_PAGER),
-                pageCount = state.forecast?.dailyForecasts?.size ?: 0,
+                pageCount = content.forecast?.dailyForecasts?.size ?: 0,
                 pageSpacing = 16.dp,
                 contentPadding = PaddingValues(start = 32.dp, end = 32.dp),
                 state = pagerState
             ){ pageIndex ->
-                val item = state.forecast?.dailyForecasts?.get(pageIndex)
+                val item = content.forecast?.dailyForecasts?.get(pageIndex)
                 val pagerOffset by animateFloatAsState( (pagerState.currentPage - pageIndex) + pagerState.currentPageOffsetFraction,
                     label = "OffsetAnimation"
                 )
@@ -225,7 +225,7 @@ fun CityWeatherScreenContent(state: CityWeatherState, contentPadding: PaddingVal
                         }
                     }
                     .testTag(TestTags.NEXT_DAY_BUTTON),
-                tint = if ( pagerState.currentPage == ((state.forecast?.dailyForecasts?.size ?: 0)-1) ) Color.LightGray else Color.DarkGray,
+                tint = if ( pagerState.currentPage == ((content.forecast?.dailyForecasts?.size ?: 0)-1) ) Color.LightGray else Color.DarkGray,
                 imageVector = Icons.Default.KeyboardArrowRight,
                 contentDescription = "next day button")
         }
@@ -406,10 +406,6 @@ fun CityWeatherScreenContentPreview() {
         dailyForecasts = listOf(forecastDailyPreview)
     )
 
-    val state = CityWeatherState(
-        forecast = forecastPreview,
-        isLoading = false,
-        error = CityWeatherError(false),
-    )
+    val state = CityWeatherState.CONTENT(forecastPreview)
     CityWeatherScreenContent(state, contentPadding = PaddingValues(0.dp), onBack = {})
 }
