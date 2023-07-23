@@ -19,7 +19,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.empik.weather.helper.TestHelper
 import com.empik.weather.helper.getMockedForecast
 import com.empik.weather.ui.TestTags
-import com.empik.weather.ui.screens.city_weather.CityWeatherError
 import com.empik.weather.ui.screens.city_weather.CityWeatherScreenContainer
 import com.empik.weather.ui.screens.city_weather.CityWeatherState
 import com.empik.weather.ui.screens.city_weather.translatedDayOfWeek
@@ -40,11 +39,7 @@ class CityWeatherScreenTest {
     fun cityWeatherScreenTest() {
         val mockedResponseBody = getMockedForecast()
 
-        val state = CityWeatherState(
-            forecast = mockedResponseBody,
-            isLoading = false,
-            error = CityWeatherError(false),
-        )
+        val state = CityWeatherState.CONTENT(forecast = mockedResponseBody,)
 
         var backClicked = false
         composeRule.mainClock.autoAdvance = false
@@ -111,11 +106,7 @@ class CityWeatherScreenTest {
     fun cityWeatherScreenSwipeByButtonsTest(){
         val mockedResponseBody = getMockedForecast()
 
-        val state = CityWeatherState(
-            forecast = mockedResponseBody,
-            isLoading = false,
-            error = CityWeatherError(false),
-        )
+        val state = CityWeatherState.CONTENT(forecast = mockedResponseBody)
 
         composeRule.mainClock.autoAdvance = false
         composeRule.setContent {
@@ -161,11 +152,7 @@ class CityWeatherScreenTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun cityWeatherScreenErrorsTest() {
-        val state = CityWeatherState(
-            forecast = null,
-            isLoading = false,
-            error = CityWeatherError(true, "Error message"),
-        )
+        val state = CityWeatherState.ERROR("Error message")
         var onRetryClicked = false
 
         composeRule.setContent {
@@ -192,11 +179,7 @@ class CityWeatherScreenTest {
     @OptIn(ExperimentalTestApi::class)
     @Test
     fun cityWeatherScreenLoadingTest() {
-        val state = CityWeatherState(
-            forecast = null,
-            isLoading = true,
-            error = CityWeatherError(false),
-        )
+        val state = CityWeatherState.LOADING
 
         composeRule.mainClock.autoAdvance = false
         composeRule.setContent {

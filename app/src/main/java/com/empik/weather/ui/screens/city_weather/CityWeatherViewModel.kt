@@ -25,7 +25,7 @@ class CityWeatherViewModel(
             weatherRepository.getForecast(locationKey).collect {
                 _state.value = when (it) {
                     is SafeResponse.Loading -> CityWeatherState.LOADING
-                    is SafeResponse.Error -> CityWeatherState.ERROR(true, it.message  ?: it.throwable?.localizedMessage)
+                    is SafeResponse.Error -> CityWeatherState.ERROR(it.message  ?: it.throwable?.localizedMessage)
                     is SafeResponse.Success -> CityWeatherState.CONTENT(it.data)
                 }
             }
@@ -36,5 +36,5 @@ class CityWeatherViewModel(
 sealed interface CityWeatherState {
     class CONTENT(val forecast: ForecastResponse? = null) : CityWeatherState
     object LOADING : CityWeatherState
-    class ERROR(val isError: Boolean = true, val message: String? = null) : CityWeatherState
+    class ERROR(val message: String? = null) : CityWeatherState
 }
