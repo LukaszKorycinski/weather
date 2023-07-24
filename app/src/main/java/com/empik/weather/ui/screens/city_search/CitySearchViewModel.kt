@@ -62,7 +62,10 @@ class CitySearchViewModel(
 
                         is SafeResponse.Success -> {
                             if(shouldAutoSelect) {
-                                _citySelectedState.value = it.data.first()
+                                it.data.firstOrNull()?.let{
+                                    _citySelectedState.value = it
+                                    clearQuery()
+                                }
                             }else{
                                 _state.value = CitySearchScreenState.CONTENT(it.data)
                             }

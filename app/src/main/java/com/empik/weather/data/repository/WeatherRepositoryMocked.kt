@@ -14,7 +14,6 @@ import org.koin.java.KoinJavaComponent
 class WeatherRepositoryMocked: WeatherRepositoryInterface {
     companion object{
         const val FORECAST_MOCK_JSON = "forecast_mock_response.json"
-        const val CITY_MOCK_JSON = "city_mock_response.json"
         const val CITIES_QUERY_MOCK_JSON = "cities_query_mock_response.json"
     }
 

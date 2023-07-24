@@ -41,6 +41,7 @@ import com.empik.weather.data.api.models.response.CityResponseItem
 import com.empik.weather.ui.TestTags
 import kotlinx.coroutines.launch
 import org.koin.androidx.compose.getViewModel
+import timber.log.Timber
 
 @Composable
 fun SearchScreen(
@@ -61,11 +62,12 @@ fun SearchScreen(
         state = state,
         savedCities = viewModel.savedCitiesState.collectAsStateWithLifecycle().value,
         onCitySearchByQuery = {
-            viewModel.getCitiesByQuery(it)
-            viewModel.clearQuery() },
-        onCitySearch = { viewModel.getCitiesByQuery(it, true) },
+            viewModel.getCitiesByQuery(it) },
+        onCitySearch = {
+            viewModel.getCitiesByQuery(it, true) },
         onCitySelected = {
             viewModel.saveCity(it)
+            viewModel.clearQuery()
             onCitySelected(it) },
         onErrorHandled = { viewModel.errorHandled() },
         )
