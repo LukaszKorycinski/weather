@@ -11,14 +11,6 @@ import kotlinx.coroutines.flow.flow
 class WeatherRepository(
     private val weatherApiClient: WeatherApiClient,
 ): WeatherRepositoryInterface {
-    override suspend fun getCities(query: String): Flow<SafeResponse<List<CityResponseItem>>> =
-        flow {
-            emit(safeApiCall {
-                weatherApiClient.getCities(
-                    query = query,
-                )
-            })
-    }
 
     override suspend fun getCityAutocomplete(query: String): Flow<SafeResponse<List<CityResponseItem>>> =
         flow {

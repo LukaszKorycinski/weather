@@ -17,14 +17,6 @@ class WeatherRepositoryMocked: WeatherRepositoryInterface {
         const val CITY_MOCK_JSON = "city_mock_response.json"
         const val CITIES_QUERY_MOCK_JSON = "cities_query_mock_response.json"
     }
-    @OptIn(ExperimentalSerializationApi::class)
-    override suspend fun getCities(query: String): Flow<SafeResponse<List<CityResponseItem>>> {
-        val responseBody = App.appContext.assets.open(CITY_MOCK_JSON).use {
-            val json = KoinJavaComponent.get<Json>(Json::class.java)
-            json.decodeFromStream<List<CityResponseItem>>(it)
-        }
-        return flow { emit(SafeResponse.Success(responseBody)) }
-    }
 
     @OptIn(ExperimentalSerializationApi::class)
     override suspend fun getCityAutocomplete(query: String): Flow<SafeResponse<List<CityResponseItem>>> {
