@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.empik.weather.data.api.SafeResponse
 import com.empik.weather.data.api.models.response.CityResponseItem
-import com.empik.weather.data.api.models.response.ForecastResponse
 import com.empik.weather.data.repository.LocalRepository
 import com.empik.weather.data.repository.WeatherRepositoryInterface
 import kotlinx.coroutines.flow.MutableStateFlow

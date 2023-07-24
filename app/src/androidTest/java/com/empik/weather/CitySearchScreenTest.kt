@@ -15,7 +15,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.empik.weather.data.api.models.response.CityResponseItem
 import com.empik.weather.helper.TestHelper
 import com.empik.weather.ui.TestTags
-import com.empik.weather.ui.screens.city_search.CitySearchError
 import com.empik.weather.ui.screens.city_search.CitySearchErrorType
 import com.empik.weather.ui.screens.city_search.CitySearchScreenState
 import com.empik.weather.ui.screens.city_search.SearchScreenContent
@@ -37,13 +36,7 @@ class CitySearchScreenTest {
         val uuid = UUID.randomUUID().toString()
         val cityItem = CityResponseItem(0, uuid, "", 0, "Kraków")
 
-        val state = CitySearchScreenState(
-            citySelected = null,
-            fetchedCitiesNames = emptyList(),
-            savedCities = listOf(cityItem),
-            isLoading = false,
-            error = null,
-        )
+        val state = CitySearchScreenState.CONTENT(fetchedCitiesNames = emptyList())
 
         var searchQuesry = ""
         var searchForCity = ""
@@ -53,6 +46,7 @@ class CitySearchScreenTest {
             WeatherTheme {
                 SearchScreenContent(
                     state = state,
+                    savedCities = listOf(cityItem),
                     onCitySearchByQuery = { searchQuesry = it },
                     onCitySearch = { searchForCity = it },
                     onCitySelected = { citySelected = it.key },
@@ -82,18 +76,13 @@ class CitySearchScreenTest {
     @Test
     fun searchScreenErrorCityNameInvalidTest(){
 
-        val state = CitySearchScreenState(
-            citySelected = null,
-            fetchedCitiesNames = emptyList(),
-            savedCities = emptyList(),
-            isLoading = false,
-            error = CitySearchError(type = CitySearchErrorType.INVALID_CITY_NAME)
-        )
+        val state = CitySearchScreenState.ERROR(type = CitySearchErrorType.INVALID_CITY_NAME)
 
         composeRule.setContent {
             WeatherTheme {
                 SearchScreenContent(
                     state = state,
+                    savedCities = emptyList(),
                     onCitySearchByQuery = { },
                     onCitySearch = { },
                     onCitySelected = { },
@@ -113,18 +102,13 @@ class CitySearchScreenTest {
     @Test
     fun searchScreenApiErrorTest(){
 
-        val state = CitySearchScreenState(
-            citySelected = null,
-            fetchedCitiesNames = emptyList(),
-            savedCities = emptyList(),
-            isLoading = false,
-            error = CitySearchError(type = CitySearchErrorType.API_ERROR)
-        )
+        val state = CitySearchScreenState.ERROR(type = CitySearchErrorType.API_ERROR)
 
         composeRule.setContent {
             WeatherTheme {
                 SearchScreenContent(
                     state = state,
+                    savedCities = emptyList(),
                     onCitySearchByQuery = { },
                     onCitySearch = { },
                     onCitySelected = { },
@@ -144,18 +128,13 @@ class CitySearchScreenTest {
     @Test
     fun searchScreenApiErrorMessageTest(){
         val errorMessage = "Error message"
-        val state = CitySearchScreenState(
-            citySelected = null,
-            fetchedCitiesNames = emptyList(),
-            savedCities = emptyList(),
-            isLoading = false,
-            error = CitySearchError(type = CitySearchErrorType.API_ERROR, message = errorMessage)
-        )
+        val state = CitySearchScreenState.ERROR(type = CitySearchErrorType.API_ERROR, message = errorMessage)
 
         composeRule.setContent {
             WeatherTheme {
                 SearchScreenContent(
                     state = state,
+                    savedCities = emptyList(),
                     onCitySearchByQuery = { },
                     onCitySearch = { },
                     onCitySelected = { },
