@@ -48,8 +48,9 @@ fun SearchScreen(
     val viewModel = getViewModel<CitySearchViewModel>()
 
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val citySelectedState by viewModel.citySelectedState.collectAsStateWithLifecycle()
 
-    state.citySelected?.let {
+    citySelectedState?.let {
         viewModel.saveCity(it)
         onCitySelected(it)
         viewModel.clearCitySelected()
@@ -57,10 +58,11 @@ fun SearchScreen(
 
     SearchScreenContent(
         state = state,
+        savedCities = viewModel.savedCitiesState.collectAsStateWithLifecycle().value,
         onCitySearchByQuery = {
             viewModel.getCitiesByQuery(it)
             viewModel.clearQuery() },
-        onCitySearch = { viewModel.getCityByName(it) },
+        onCitySearch = { viewModel.getCitiesByQuery(it, true) },
         onCitySelected = {
             viewModel.saveCity(it)
             onCitySelected(it) },
@@ -72,6 +74,7 @@ fun SearchScreen(
 @Composable
 fun SearchScreenContent(
     state: CitySearchScreenState,
+    savedCities: List<CityResponseItem>,
     onCitySearchByQuery: (String) -> Unit,
     onCitySearch: (String) -> Unit,
     onCitySelected: (CityResponseItem) -> Unit,
@@ -80,16 +83,16 @@ fun SearchScreenContent(
     var text by remember { mutableStateOf("") }
     var active by remember { mutableStateOf(false) }
     val savedCitiesFiltered = remember (text) {
-        state.savedCities.filter { it.localizedName.contains(text, ignoreCase = true) }
+        savedCities.filter { it.localizedName.contains(text, ignoreCase = true) }
     }
 
     val snackbarHostState = remember { SnackbarHostState() }
     val composeScope = rememberCoroutineScope()
 
-    state.error?.let { error ->
-        val errorMessage = when(error.type){
+    if(state is CitySearchScreenState.ERROR) {
+        val errorMessage = when(state.type){
             CitySearchErrorType.INVALID_CITY_NAME -> stringResource(R.string.city_name_invalid)
-            CitySearchErrorType.API_ERROR -> error.message ?: stringResource(R.string.unknown_api_error)
+            CitySearchErrorType.API_ERROR -> state.message ?: stringResource(R.string.unknown_api_error)
         }
         onErrorHandled()
         composeScope.launch {
@@ -171,22 +174,24 @@ fun SearchScreenContent(
                         }
                     }
 
-                    items(state.fetchedCitiesNames.size) { index ->
-                        Row(
-                            Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Start
-                        ) {
-                            Icon(imageVector = Icons.Default.Place, contentDescription = "geo icon")
-                            Text(
-                                text = state.fetchedCitiesNames[index].localizedName,
-                                modifier = Modifier
-                                    .clickable {
-                                        active = false
-                                        onCitySelected(state.fetchedCitiesNames[index])
-                                    }
-                                    .padding(8.dp),
-                            )
+                    if(state is CitySearchScreenState.CONTENT){
+                        items(state.fetchedCitiesNames.size) { index ->
+                            Row(
+                                Modifier.fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Start
+                            ) {
+                                Icon(imageVector = Icons.Default.Place, contentDescription = "geo icon")
+                                Text(
+                                    text = state.fetchedCitiesNames[index].localizedName,
+                                    modifier = Modifier
+                                        .clickable {
+                                            active = false
+                                            onCitySelected(state.fetchedCitiesNames[index])
+                                        }
+                                        .padding(8.dp),
+                                )
+                            }
                         }
                     }
                 }
@@ -198,6 +203,5 @@ fun SearchScreenContent(
 @Composable
 @Preview
 fun SearchScreenContentPreview() {
-    val state = CitySearchScreenState()
-    SearchScreenContent(state, {}, {}, {}, {})
+    SearchScreenContent(CitySearchScreenState.CONTENT(), emptyList(), {}, {}, {}, {})
 }
